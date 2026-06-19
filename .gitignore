@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+venv/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# pytest
+.pytest_cache/
+.cache/
+
+# logs / reports
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Anaconda
+.ipynb_checkpoints/
