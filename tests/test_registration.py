@@ -1,25 +1,20 @@
-from generations import *
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
+from data.urls import Urls
+from data.test_data import UserData
+from generators import generate_email
+from pages.registration_page import RegistrationPage
 
+class TestRegistration:
 
-def test_register_user_successfully(driver):
-    driver.get(URL + 'register')
-    driver.find_element(By.XPATH, "//input[@name='name']").send_keys('Анастасия')
-    email_input = "//label[text()='Email']/following-sibling::input"
-    WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.XPATH, email_input)))
-    driver.find_element(By.XPATH, email_input).send_keys(generate_email())
-    driver.find_element(By.XPATH, "//input[@type='password']").send_keys('123456')
-    driver.find_element(By.XPATH, "//button[text()='Зарегистрироваться']").click()
-    WebDriverWait(driver, 5).until(EC.url_changes(URL + 'register'))
-    
-def test_register_user_with_short_password(driver):
-    driver.get(URL + 'register')
-    driver.find_element(By.XPATH, "//input[@name='name']").send_keys('Анастасия')
-    email_input = "//label[text()='Email']/following-sibling::input"
-    driver.find_element(By.XPATH, email_input).send_keys(generate_email())
-    driver.find_element(By.XPATH, "//input[@type='password']").send_keys('123')
-    driver.find_element(By.XPATH, "//button[text()='Зарегистрироваться']").click()
-    error = WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.XPATH, "//*[contains(text(),'Некорректный пароль')]")))
-    assert error.is_displayed()
+    def test_register_user_successfully(self, driver):
+        driver.get(Urls.register_url)
+        registration_page = RegistrationPage(driver)
+        registration_page.register(UserData.name,generate_email(),UserData.password)
+        registration_page.wait_registration_success()
+        assert "login" in driver.current_url
+
+    def test_register_user_with_short_password(self, driver):
+        driver.get(Urls.register_url)
+        registration_page = RegistrationPage(driver)
+        registration_page.register(UserData.name,generate_email(),"123")
+        error = registration_page.get_password_error()
+        assert error.is_displayed()

@@ -1,35 +1,41 @@
-from generations import *
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
+from data.urls import Urls
+from data.test_data import UserData
+from pages.login_page import LoginPage
+from pages.profile_page import ProfilePage
 
-def authorize(driver):
-    driver.get(URL + 'login')
-    driver.find_element('xpath', "//input[@name='name']").send_keys(Test_email)
-    driver.find_element('xpath',"//input[@type='password']").send_keys(Test_password)
-    driver.find_element('xpath',"//button[text()='Войти']").click()
+class TestProfile:
 
-def test_go_to_personal_account(driver):
-    driver.get(URL)
-    driver.find_element('xpath',"//p[text()='Личный Кабинет']").click()
-    assert 'login' in driver.current_url
+    def test_go_to_personal_account(self, driver):
+        driver.get(Urls.login_url)
+        login_page = LoginPage(driver)
+        login_page.login(UserData.email, UserData.password)
+        profile_page = ProfilePage(driver)
+        profile_page.open_personal_account()
+        assert "/account" in driver.current_url
 
-def test_go_to_constructor(driver):
-    driver.get(URL)
-    driver.find_element('xpath',"//p[text()='Личный Кабинет']").click()
-    driver.find_element('xpath',"//p[text()='Конструктор']").click()
-    assert driver.current_url == URL
+    def test_go_to_constructor(self, driver):
+        driver.get(Urls.login_url)
+        login_page = LoginPage(driver)
+        login_page.login(UserData.email, UserData.password)
+        profile_page = ProfilePage(driver)
+        profile_page.open_personal_account()
+        profile_page.open_constructor()
+        assert driver.current_url == Urls.base_url
 
-def test_go_to_constructor_by_logo(driver):
-    driver.get(URL)
-    driver.find_element('xpath',"//p[text()='Личный Кабинет']").click()
-    driver.find_element('xpath',"//a[contains(@href,'/')]").click()
-    assert driver.current_url == URL
+    def test_go_to_constructor_by_logo(self, driver):
+        driver.get(Urls.login_url)
+        login_page = LoginPage(driver)
+        login_page.login(UserData.email, UserData.password)
+        profile_page = ProfilePage(driver)
+        profile_page.open_personal_account()
+        profile_page.open_constructor_by_logo()
+        assert driver.current_url == Urls.base_url
 
-
-def test_logout(driver):
-    authorize(driver)
-    driver.find_element('xpath', "//p[text()='Личный Кабинет']").click()
-    WebDriverWait(driver, 5).until(EC.visibility_of_element_located((By.XPATH, "//button[text()='Выход']")))
-    driver.find_element('xpath', "//button[text()='Выход']").click()
-    WebDriverWait(driver, 5).until(EC.url_contains("login"))
+    def test_logout(self, driver):
+        driver.get(Urls.login_url)
+        login_page = LoginPage(driver)
+        login_page.login(UserData.email, UserData.password)
+        profile_page = ProfilePage(driver)
+        profile_page.open_personal_account()
+        profile_page.logout()
+        assert "login" in driver.current_url
