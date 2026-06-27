@@ -31,15 +31,42 @@
 ---
 
 ## Структура проекта
-- tests/ — тесты
-- conftest.py — фикстуры
-- generations.py — тестовые данные и генераторы
-- README.md — описание проекта
-- .gitignore — исключения Git
+
+```
+├── conftest.py                 # Фикстуры
+├── generators.py               # Генераторы email и пароля
+├── README.md                   # Описание проекта
+├── .gitignore                  # Исключения Git
+│
+├── data/                       
+│   ├── test_data.py            # Ожидаемые значения и константы
+│   ├── urls.py                 # URL-адреса страниц
+│   └── constructor_data.py     # Данные конструктора
+│
+├── locators/                   
+│   ├── constructor_locators.py # Локаторы конструктора
+│   ├── login_locators.py       # Локаторы страницы входа
+│   ├── profile_locators.py     # Локаторы личного кабинета
+│   └── registration_locators.py# Локаторы страницы регистрации
+│
+├── pages/
+│   ├── base_page.py            # Базовый класс с общими методами                      
+│   ├── constructor_page.py     # Методы конструктора
+│   ├── login_page.py           # Методы страницы входа
+│   ├── profile_page.py         # Методы личного кабинета
+│   └── registration_page.py    # Методы страницы регистрации
+│
+└── tests/                      
+    ├── test_constructor.py     # Тесты конструктора
+    ├── test_login.py           # Тесты авторизации
+    ├── test_profile.py         # Тесты личного кабинета
+    └── test_registration.py    # Тесты регистрации
+```
 
 ---
 
 ## Технологии
 - Python
-- Selenium
-- Pytest# Sprint_5
+- Selenium WebDriver
+- Pytest
+- Page Object Model
