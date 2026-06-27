@@ -1,21 +1,18 @@
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from pages.base_page import BasePage
 from locators.registration_locators import RegistrationLocators
 from data.urls import Urls
 
-class RegistrationPage:
 
-    def __init__(self, driver):
-        self.driver = driver
+class RegistrationPage(BasePage):
 
     def register(self, name, email, password):
-        self.driver.find_element(*RegistrationLocators.name_input).send_keys(name)
-        self.driver.find_element(*RegistrationLocators.email_input).send_keys(email)
-        self.driver.find_element(*RegistrationLocators.password_input).send_keys(password)
-        self.driver.find_element(*RegistrationLocators.register_button).click()
+        self.send_keys(RegistrationLocators.name_input, name)
+        self.send_keys(RegistrationLocators.email_input, email)
+        self.send_keys(RegistrationLocators.password_input, password)
+        self.click_element(RegistrationLocators.register_button)
 
     def wait_registration_success(self):
-        WebDriverWait(self.driver, 10).until(EC.url_changes(Urls.register_url))
+        self.wait_url_change(Urls.register_url)
 
     def get_password_error(self):
-        return WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(RegistrationLocators.password_error))
+        return self.wait_visible(RegistrationLocators.password_error)

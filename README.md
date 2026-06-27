@@ -49,7 +49,8 @@
 │   ├── profile_locators.py     # Локаторы личного кабинета
 │   └── registration_locators.py# Локаторы страницы регистрации
 │
-├── pages/                      
+├── pages/
+│   ├── base_page.py            # Базовый класс с общими методами                      
 │   ├── constructor_page.py     # Методы конструктора
 │   ├── login_page.py           # Методы страницы входа
 │   ├── profile_page.py         # Методы личного кабинета
@@ -66,5 +67,6 @@
 
 ## Технологии
 - Python
-- Selenium
-- Pytest# Sprint_5
+- Selenium WebDriver
+- Pytest
+- Page Object Model
